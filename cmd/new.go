@@ -7,6 +7,11 @@ import (
 var (
 	name string
 	key  string
+	// TODO consider providing parameters:
+	// - digits
+	// - algorithm
+	// - issuer
+	// - period
 
 	newCmd = &cobra.Command{
 		Use:   "new",
