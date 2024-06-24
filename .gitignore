@@ -12,7 +12,7 @@
 *.test
 
 # testdata
-testdata/ n
+testdata/
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
