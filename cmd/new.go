@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"github.com/cnnrznn/authenticator/model"
+	"github.com/cnnrznn/authenticator/store"
 	"github.com/spf13/cobra"
 )
 
@@ -17,8 +19,19 @@ var (
 		Use:   "new",
 		Short: "Add a new app",
 
-		Run: func(cmd *cobra.Command, args []string) {
-			// Add name, key to encrypted storage
+		RunE: func(cmd *cobra.Command, args []string) error {
+			tokens, _ := store.Load()
+
+			tokens = append(tokens, model.Token{
+				Name:   name,
+				Secret: key,
+			})
+
+			if err := store.Save(tokens); err != nil {
+				return err
+			}
+
+			return nil
 		},
 	}
 )
