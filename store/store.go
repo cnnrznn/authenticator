@@ -51,7 +51,7 @@ func Load() ([]model.Token, error) {
 		return nil, err
 	}
 
-	f, err := os.Open(path)
+	f, err := open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -59,9 +59,7 @@ func Load() ([]model.Token, error) {
 
 	tokens := []model.Token{}
 
-	if err := json.NewDecoder(f).Decode(&tokens); err != nil {
-		return nil, err
-	}
+	json.NewDecoder(f).Decode(&tokens)
 
 	return tokens, nil
 }
@@ -71,6 +69,7 @@ func open(fn string) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return f, nil
 }
 
