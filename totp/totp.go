@@ -14,7 +14,7 @@ func Generate(secret string, t time.Time) (string, error) {
 	counter := make([]byte, 8)
 	binary.BigEndian.PutUint64(counter, step(t))
 
-	key, err := base32.StdEncoding.DecodeString(secret)
+	key, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(secret)
 	if err != nil {
 		return "", err
 	}
@@ -40,5 +40,5 @@ func hotp(counter, secret []byte) (string, error) {
 
 	result := code % int(math.Pow10(6))
 
-	return fmt.Sprintf("%v", result), nil
+	return fmt.Sprintf("%06d", result), nil
 }
