@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	name string
-	key  string
+	name   string
+	secret string
 	// TODO consider providing parameters:
 	// - digits
 	// - algorithm
@@ -24,7 +24,7 @@ var (
 
 			tokens = append(tokens, model.Token{
 				Name:   name,
-				Secret: key,
+				Secret: secret,
 			})
 
 			if err := store.Save(tokens); err != nil {
@@ -39,9 +39,9 @@ var (
 func init() {
 	rootCmd.AddCommand(newCmd)
 
-	newCmd.Flags().StringVar(&name, "name", "", "Name of the new app")
-	newCmd.Flags().StringVar(&key, "key", "", "Setup key provided by app")
+	newCmd.Flags().StringVar(&name, "name", "", "Token name, typically \"<App>:<user>\"")
+	newCmd.Flags().StringVar(&secret, "secret", "", "Setup key provided by app")
 
 	newCmd.MarkFlagRequired("name")
-	newCmd.MarkFlagRequired("key")
+	newCmd.MarkFlagRequired("secret")
 }
