@@ -49,5 +49,8 @@ func hotp(counter, secret []byte) (string, error) {
 
 	result := code % int(math.Pow10(6))
 
-	return fmt.Sprintf("%06d", result), nil
+	token := fmt.Sprintf("%06d", result)
+	token = fmt.Sprintf("%v-%v", token[:3], token[3:])
+
+	return token, nil
 }
