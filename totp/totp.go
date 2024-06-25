@@ -10,20 +10,29 @@ import (
 	"time"
 )
 
-func Generate(secret string, t time.Time) (string, error) {
+func Generate(secret string, t time.Time) (string, int, error) {
 	counter := make([]byte, 8)
-	binary.BigEndian.PutUint64(counter, step(t))
+	step, remaining := calcStep(t)
+	binary.BigEndian.PutUint64(counter, step)
 
 	key, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(secret)
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
 
-	return hotp(counter, key)
+	token, err := hotp(counter, key)
+	if err != nil {
+		return "", 0, err
+	}
+
+	return token, remaining, nil
 }
 
-func step(t time.Time) uint64 {
-	return uint64(t.Unix()) / 30
+func calcStep(t time.Time) (uint64, int) {
+	period := int64(30)
+	t0 := t.Unix() / period
+	t1 := t0*period + period
+	return uint64(t0), int(t1 - t.Unix())
 }
 
 func hotp(counter, secret []byte) (string, error) {
