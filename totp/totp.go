@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math"
+	"strings"
 	"time"
 )
 
@@ -15,6 +16,7 @@ func Generate(secret string, t time.Time) (string, int, error) {
 	step, remaining := calcStep(t)
 	binary.BigEndian.PutUint64(counter, step)
 
+	secret = strings.ToUpper(secret)
 	key, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(secret)
 	if err != nil {
 		return "", 0, err
